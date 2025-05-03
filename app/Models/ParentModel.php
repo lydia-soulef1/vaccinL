@@ -18,6 +18,7 @@ class ParentModel extends Authenticatable
     // Define the fillable fields for mass assignment
     protected $fillable = [
         'name',
+        'prenom',
         'email',
         'password',
     ];

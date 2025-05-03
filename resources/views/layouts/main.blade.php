@@ -35,13 +35,6 @@
                         @else
                         <li><a href="{{ route('pardash') }}" class="text-white bg-green-600 hover:bg-green-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">Dashboard</a></li>
                         @endif
-
-                        <li>
-                            <form action="{{ route('logout') }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" class="text-white bg-gray-600 hover:bg-gray-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">Logout</button>
-                            </form>
-                        </li>
                         @else
                         <li><a href="{{ route('login') }}" class="bg-white text-[#4A90E2] px-4 py-2 rounded-full hover:bg-gray-100">Login</a></li>
                         @endauth

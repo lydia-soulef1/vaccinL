@@ -1,0 +1,59 @@
+-- عند الولادة
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('BCG', 'Vaccin contre la tuberculose', 'Naissance'),
+('Hépatite B (HBV-1)', '1ère injection du vaccin contre l''hépatite virale B', 'Naissance'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', 'Naissance');
+
+-- عند 1 شهر
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('Hépatite B (HBV-2)', '2ème injection du vaccin contre l''hépatite B', '1 mois'),
+('Vitamine D3', '1 ampoule orale pour prévenir le rachitisme', '1 mois');
+
+-- عند 3 أشهر
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('DTC-1', '1ère injection contre Diphtérie, Tétanos et Coqueluche', '3 mois'),
+('HIB-1', '1ère injection contre Haemophilus influenzae b', '3 mois'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', '3 mois');
+
+-- عند 4 أشهر
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('DTC-2', '2ème injection contre Diphtérie, Tétanos et Coqueluche', '4 mois'),
+('HIB-2', '2ème injection contre Haemophilus influenzae b', '4 mois'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', '4 mois');
+
+-- عند 5 أشهر
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('DTC-3', '3ème injection contre Diphtérie, Tétanos et Coqueluche', '5 mois'),
+('HIB-3', '3ème injection contre Haemophilus influenzae b', '5 mois'),
+('Hépatite B (HBV-3)', '3ème injection contre l''hépatite virale B', '5 mois'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', '5 mois');
+
+-- عند 6 أشهر
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('Vitamine D3', '1 ampoule orale pour prévenir le rachitisme', '6 mois');
+
+-- عند 9 أشهر
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('Anti-rougeoleux', 'Vaccin contre la rougeole', '9 mois');
+
+-- عند 18 شهر
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('DTC-4', '4ème injection contre Diphtérie, Tétanos et Coqueluche', '18 mois'),
+('HIB-4', '4ème injection de rappel contre Haemophilus influenzae b', '18 mois'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', '18 mois');
+
+-- عند 6 سنوات
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('DT enfant', 'Vaccin contre Diphtérie et Tétanos pour enfant', '6 ans'),
+('Anti-rougeoleux', '2ème dose du vaccin contre la rougeole', '6 ans'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', '6 ans');
+
+-- من 11 إلى 13 سنة
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('DT adulte', 'Vaccin contre Diphtérie et Tétanos pour adulte', '11-13 ans'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', '11-13 ans');
+
+-- من 16 إلى 18 سنة
+INSERT INTO vaccines (name, description, recommended_age) VALUES
+('DT adulte (rappel)', 'Vaccin de rappel contre Diphtérie et Tétanos', '16-18 ans'),
+('Poliomyélite orale', 'Vaccin oral contre la poliomyélite', '16-18 ans');

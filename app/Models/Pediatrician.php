@@ -10,6 +10,17 @@ class Pediatrician extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'password', 'hospital', 'rpps_number'];
+    protected $fillable = ['name','prenom', 'email', 'password', 'hospital', 'rpps_number'];
+
+    // في نموذج Pediatrician
+public function children()
+{
+    return $this->hasMany(Child::class);
+}
+public function getFullNameAttribute()
+{
+    return 'Dr. ' . trim($this->prenom . ' ' . $this->name);
+}
+
 
 }

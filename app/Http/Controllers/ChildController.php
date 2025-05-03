@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Child;
 use Illuminate\Http\Request;
+use App\Models\Vaccine;
 
 class ChildController extends Controller
 {
@@ -37,5 +38,10 @@ class ChildController extends Controller
 
         // إرجاع عرض التقويم مع بيانات الطفل
         return view('calendar', compact('child'));
+    }
+    public function showVaccines()
+    {
+        $vaccines = Vaccine::all(); // جلب جميع اللقاحات
+        return view('welcome', compact('vaccines'));
     }
 }

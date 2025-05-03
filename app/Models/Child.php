@@ -22,10 +22,12 @@ class Child extends Model
     protected $dates = ['dob'];
 
     // Define the relationship with the Parent model
-    public function parent()
-    {
-        return $this->belongsTo(ParentModel::class); // each child belongs to one parent
-    }
+  // في نموذج Child.php
+public function parent()
+{
+    return $this->belongsTo(ParentModel::class, 'parent_id'); // افترض أن لديك parent_id في جدول children
+}
+
 
     // Define the relationship with the vaccinations (if applicable)
     public function vaccinations()
@@ -37,6 +39,11 @@ class Child extends Model
         return $this->belongsTo(User::class);
     }
 
+// في نموذج Child
+public function pediatrician()
+{
+    return $this->belongsTo(Pediatrician::class);
+}
 
     // You can define additional methods or scopes as needed
 }

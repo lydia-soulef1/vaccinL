@@ -21,6 +21,7 @@ class PediatricianRegistrationController extends Controller
         // Validate the input data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'prenom' => 'nullable|string|max:255',
             'email' => 'required|email|unique:pediatricians,email',
             'password' => 'required|min:8|regex:/[A-Z]/|regex:/[0-9]/',
             'hospital' => 'required|string|max:255',
@@ -30,6 +31,7 @@ class PediatricianRegistrationController extends Controller
         // Create the pediatrician record in the database
         $pediatrician = new Pediatrician();
         $pediatrician->name = $validated['name'];
+        $pediatrician->prenom = $validated['prenom'] ?? null;
         $pediatrician->email = $validated['email'];
         $pediatrician->password = Hash::make($validated['password']); // Hash the password
         $pediatrician->hospital = $validated['hospital'];
@@ -45,9 +47,12 @@ class PediatricianRegistrationController extends Controller
         ]);
 
         // Start a session and store the user information
-        session(['pediatrician_id' => $pediatrician->id]);
-        session(['pediatrician_name' => $pediatrician->name]);
-        session(['pediatrician_email' => $pediatrician->email]);
+        session([
+            'pediatrician_id' => $pediatrician->id,
+            'pediatrician_name' => $pediatrician->name,
+            'pediatrician_email' => $pediatrician->email,
+            'pediatrician_prenom' => $pediatrician->prenom,
+        ]);
 
         // Redirect to the welcome page
         return redirect()->route('login');  // Adjust this as needed

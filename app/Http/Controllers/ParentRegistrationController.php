@@ -21,6 +21,7 @@ class ParentRegistrationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'prenom' => 'nullable|string|max:255',
             'email' => 'required|email|unique:parents,email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -35,6 +36,7 @@ class ParentRegistrationController extends Controller
             // إنشاء سجل في جدول parents
             $parent = ParentModel::create([
                 'name' => $request->name,
+                'prenom' => $request->prenom,
                 'email' => $request->email,
                 'password' => $hashedPassword,
             ]);

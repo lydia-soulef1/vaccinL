@@ -3,11 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ParentRegistrationController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PediatricianRegistrationController;
+use App\Http\Controllers\ChildController;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+Route::get('/', [ChildController::class, 'showVaccines'])->name('welcome');
 
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -29,14 +33,13 @@ Route::get('/add-child', function() {
     // This route would go to the add child page
 })->name('add_child');
 
-use App\Http\Controllers\PediatricianRegistrationController;
+
 
 Route::post('/register/medecin', [PediatricianRegistrationController::class, 'register']);
-
 Route::get('/register/medecin', [PediatricianRegistrationController::class, 'showForm'])->name('register.medecin');
 
 
-use App\Http\Controllers\DashboardController;
+
 
 
 // Protect the dashboard routes with authentication middleware
@@ -44,10 +47,8 @@ use App\Http\Controllers\DashboardController;
 Route::get('/meddash', [DashboardController::class, 'pediatricianDashboard'])->name('meddash');
 Route::get('/pardash', [DashboardController::class, 'parentDashboard'])->name('pardash');
 
-use App\Http\Controllers\ChildController;
+
 
 Route::post('/children', [ChildController::class, 'store'])->name('child.store');
-
-
-
 Route::get('/calendar/child/{child_id}', [ChildController::class, 'showCalendar'])->name('calendar.child');
+Route::post('/vaccines/update', [DashboardController::class, 'updateVaccines'])->name('vaccines.update');

@@ -9,13 +9,19 @@
 
         <!-- Champ Nom complet -->
         <div class="mb-6">
-            <label for="name" class="block text-gray-100 text-lg mb-2">Nom complet</label>
+            <label for="name" class="block text-gray-100 text-lg mb-2">Nom</label>
             <input type="text" id="name" name="name" required value="{{ old('name') }}"
                 class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             @error('name')
             <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
             @enderror
         </div>
+        <div class="mb-6">
+            <label for="prenom" class="block text-gray-100 text-lg mb-2">Prénom</label>
+            <input type="text" id="prenom" name="prenom" placeholder="Jean" required
+                class="w-full px-4 py-2 bg-gray-700 text-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
 
         <!-- Champ Email -->
         <div class="mb-6">

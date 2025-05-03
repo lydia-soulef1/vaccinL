@@ -38,8 +38,17 @@ class User extends Authenticatable
     }
     // In your User or ParentModel
     public function getIsPediatricianAttribute()
-{
-    return $this->attributes['is_pediatrician'];  // Use $this->attributes to access the column value
-}
+    {
+        return $this->attributes['is_pediatrician'];  // Use $this->attributes to access the column value
+    }
 
+    // App\Models\User.php
+    public function pediatrician()
+    {
+        return $this->hasOne(Pediatrician::class);
+    }
+    public function vaccinations()
+    {
+        return $this->hasMany(Vaccination::class, 'pediatrician_id');
+    }
 }

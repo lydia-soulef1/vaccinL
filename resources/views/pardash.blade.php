@@ -11,12 +11,12 @@
     <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="logo">
-            <img src="{{ asset('assets/img/logo-white.png') }}" alt="VacciBaby">
+            <img src="{{ asset('images/logo-white.jpg') }}" alt="VacciBaby">
         </div>
 
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="{{ route('pardash') }}" class="nav-link active">
+                <a href="#tableu" class="nav-link active">
                     <i class="fas fa-home"></i> Tableau de bord
                 </a>
             </li>
@@ -30,14 +30,81 @@
                     <i class="fas fa-calendar-alt"></i> Calendrier
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-toggle="modal" data-target="#messagesModal">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+            </li>
 
             <li class="nav-item">
-                <a href="{{ route('logout') }}" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i> Déconnexion
-                </a>
+                <form action="{{ route('logout') }}" method="POST" class="nav-link">
+                    @csrf
+                    <button type="submit"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+                </form>
             </li>
         </ul>
     </div>
+
+    <!-- Messages Modal -->
+    <div class="modal fade" id="messagesModal" tabindex="-1" role="dialog" aria-labelledby="messagesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="messagesModalLabel">📬 Messages du système</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body bg-light">
+                    <!-- Message de bienvenue -->
+                    <div class="alert alert-info d-flex align-items-center">
+                        <i class="fas fa-user-md mr-2"></i>
+                        <div>
+                            👋 Bonjour Monsieur {{ $parent->prenom ? $parent->prenom . ' ' . $parent->name : $parent->name }},
+                            ,
+                            Bienvenue sur votre tableau de bord. Nous vous remercions pour votre confiance et votre engagement envers la santé de votre enfant.
+                            👶 Grâce à notre plateforme, soyez assuré que votre enfant est entre de bonnes mains
+                        </div>
+                    </div>
+
+                    <!-- Messages des enfants -->
+                    @forelse ($children as $child)
+                    <div class="media mb-4 p-3 rounded shadow-sm bg-white border-left-success">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4086/4086679.png" width="40" class="mr-3" alt="icon">
+                        <div class="media-body">
+                            <h6 class="mt-0 text-success">
+                                👶 L’enfant <strong>{{ $child->name }}</strong> a été traité avec succès.
+                            </h6>
+                            <p class="mb-1">
+                                💉 Dernier vaccin administré : <strong>{{ $child->last_vaccine_name ?? 'Non disponible' }}</strong><br>
+                                👨‍⚕️ Pédiatre responsable : <strong>Dr. {{ $child->pediatrician_name }}</strong><br>
+                                📅 Prochain rendez-vous :
+                                <strong>
+                                    {{ $child->next_rendez_vous ? \Carbon\Carbon::parse($child->next_rendez_vous)->format('d/m/Y') : 'Non défini' }}
+                                </strong>
+                            </p>
+                            <a href="#progress" class="btn btn-outline-success btn-sm mt-2 view-progress-btn">
+                                📊 Voir la progression
+                            </a>
+
+                            <br>
+                            <small class="text-muted">⏱️ Mise à jour récente</small>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-center text-muted">Aucun message pour le moment.</p>
+                    @endforelse
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <!-- Modal -->
     <div class="modal fade" id="addChildModal" tabindex="-1" aria-labelledby="addChildModalLabel" aria-hidden="true">
@@ -78,14 +145,14 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
+        <div class="header" id="tableu">
             <h1>Tableau de Bord</h1>
             <div class="user-info">
                 <div class="user-avatar">
                     {{ strtoupper(substr($parent->name, 0, 1)) }}
                 </div>
                 <div>
-                    <div>{{ $parent->name }}</div>
+                    <div>Mr. {{ $parent->prenom ? $parent->prenom . ' ' . $parent->name : $parent->name }}</div>
                     <small>{{ $parent->email }}</small>
                 </div>
             </div>
@@ -117,22 +184,23 @@
                 <i class="fas fa-bell"></i> Prochains vaccins
             </h2>
 
-            @if (!empty($upcomingVaccines))
+            @if (!empty($children))
             <ul style="list-style: none; padding: 0;">
-                @foreach ($upcomingVaccines as $vaccine)
-                <li style="padding: 0.75rem 0; border-bottom: 1px dashed var(--gray);">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong>{{ $vaccine['name'] }}</strong>
-                            <div style="font-size: 0.9rem; color: #666;">
-                                Pour {{ $vaccine['child_name'] }}
-                            </div>
-                        </div>
-                        <span style="background-color: var(--warning); color: #000; padding: 0.25rem 0.5rem; border-radius: 1rem; font-size: 0.8rem; font-weight: 600;">
-                            À {{ $vaccine['age_month'] }} mois
-                        </span>
+                @foreach ($children as $child)
+                <div class="card mb-3 shadow-sm border-left-primary">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            👶 Nom de l’enfant : {{ $child->name }}
+                        </h5>
+                        <p class="card-text">
+                            💉 <strong>Prochain vaccin :</strong> {{ $child->next_vaccine_name }}
+                        </p>
+                        <p class="card-text">
+                            📅 <strong>rendez-vous :</strong>
+                            {{ $child->next_rendez_vous ? \Carbon\Carbon::parse($child->next_rendez_vous)->format('d/m/Y') : 'Non défini' }}
+                        </p>
                     </div>
-                </li>
+                </div>
                 @endforeach
             </ul>
             @else
@@ -144,7 +212,7 @@
         </div>
 
         <!-- Children List -->
-        <div class="card">
+        <div class="card" id="progress">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h2 class="card-title">
                     <i class="fas fa-child"></i> Mes enfants
@@ -179,12 +247,6 @@
                         <div class="progress-container">
                             <div class="progress-bar" style="width: {{ $progress }}%"></div>
                         </div>
-                    </div>
-
-                    <div style="margin-top: 1.5rem;">
-                        <a href="#" class="btn btn-primary" style="display: block; text-align: center;" ddata-toggle="modal" data-target="#calendarModal">
-                            <i class="fas fa-syringe"></i> Voir le calendrier
-                        </a>
                     </div>
                 </div>
                 @endforeach
@@ -252,6 +314,25 @@
         }
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.view-progress-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // إغلاق المودال
+                $('#messagesModal').modal('hide');
+
+                // الانتقال إلى قسم #progress بعد وقت بسيط لتفادي مشاكل التحريك داخل المودال
+                setTimeout(() => {
+                    document.getElementById('progress')?.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }, 400);
+            });
+        });
+    });
+</script>
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

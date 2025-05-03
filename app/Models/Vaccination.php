@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Vaccination extends Model
 {
@@ -33,8 +34,9 @@ class Vaccination extends Model
     }
 
     // العلاقة مع جدول الأطباء
+    // بدل pediatrician()
     public function pediatrician()
     {
-        return $this->belongsTo(Pediatrician::class);
+        return $this->belongsTo(User::class, 'pediatrician_id');
     }
 }
