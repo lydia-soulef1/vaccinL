@@ -24,10 +24,27 @@
             <!-- Navbar -->
             <nav class="hidden md:flex space-x-6">
                 <ul class="flex space-x-6">
-                    <li><a href="#features" class="text-white hover:text-gray-300">Fonctionnalités</a></li>
-                    <li><a href="#conditions" class="text-white hover:text-gray-300">Conditions</a></li>
-                    <li><a href="#importance" class="text-white hover:text-gray-300">Importance</a></li>
-                    <li><a href="#vaccins" class="text-white hover:text-gray-300">Vaccin</a></li>
+                    <li>
+                        <a href="{{ Request::is('/') ? '#features' : url('/#features') }}" class="text-white hover:text-gray-300">
+                            Fonctionnalités
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ Request::is('/') ? '#conditions' : url('/#conditions') }}" class="text-white hover:text-gray-300">
+                            Conditions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ Request::is('/') ? '#importance' : url('/#importance') }}" class="text-white hover:text-gray-300">
+                            Importance
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ Request::is('/') ? '#vaccins' : url('/#vaccins') }}" class="text-white hover:text-gray-300">
+                            Vaccin
+                        </a>
+                    </li>
+
                     <ul class="flex space-x-6">
                         @auth
                         @if(auth()->user()->is_pediatrician)
