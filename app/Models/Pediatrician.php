@@ -10,7 +10,7 @@ class Pediatrician extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','prenom', 'email', 'password', 'hospital', 'rpps_number'];
+    protected $fillable = ['name','prenom', 'email', 'password', 'hospital', 'rpps_number','accepted'];
 
     // في نموذج Pediatrician
 public function children()

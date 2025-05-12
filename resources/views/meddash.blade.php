@@ -63,26 +63,22 @@
 
 
     <div class="container mt-4">
-
+        <h1 class="text-center fw-bold display-4 my-4">Pediatrican Dashboard</h1>
         <div class="header" id="tableu">
-            <h1>Tableau de Bord</h1>
             <div class="user-info">
                 <div class="user-avatar">
                     {{ strtoupper(substr($children[0]->pediatrician_name, 0, 1)) }}
                 </div>
                 <div>
                     <div>
-                        Dr. {{ $children[0]->pediatrician->full_name ?? $children[0]->pediatrician_name ?? 'Pédiatre non défini' }}
+                        Dr. {{ $pediatrician->prenom }} {{ $pediatrician->name }}
                     </div>
-
-
-
-                    <small>{{ $children[0]->pediatrician->email ?? 'Non disponible' }}</small>
+                    <small>{{ $pediatrician->email }}</small>
                 </div>
 
             </div>
         </div>
-        <h1 class="mb-4">Enfants suivis</h1>
+        <h1 class="text-2xl font-bold mb-6">Enfants suivis</h1>
 
         <div id="children-list">
             @foreach ($children as $child)

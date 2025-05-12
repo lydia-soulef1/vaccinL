@@ -6,6 +6,7 @@ use App\Http\Controllers\ParentRegistrationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PediatricianRegistrationController;
 use App\Http\Controllers\ChildController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,3 +53,14 @@ Route::get('/pardash', [DashboardController::class, 'parentDashboard'])->name('p
 Route::post('/children', [ChildController::class, 'store'])->name('child.store');
 Route::get('/calendar/child/{child_id}', [ChildController::class, 'showCalendar'])->name('calendar.child');
 Route::post('/vaccines/update', [DashboardController::class, 'updateVaccines'])->name('vaccines.update');
+
+
+Route::get('statistics', [AdminController::class, 'statistics'])->name('statistics');
+
+Route::get('/admin/parent/{id}/children', [AdminController::class, 'getChildren']);
+
+Route::post('/pediatricians/{id}/accept', [AdminController::class, 'acceptPediatrician'])->name('pediatricians.accept');
+
+Route::put('/children/{id}', [ChildController::class, 'update'])->name('children.update');
+
+Route::delete('/children/{id}', [ChildController::class, 'destroy'])->name('children.destroy');

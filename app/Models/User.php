@@ -44,11 +44,23 @@ class User extends Authenticatable
 
     // App\Models\User.php
     public function pediatrician()
-    {
-        return $this->hasOne(Pediatrician::class);
-    }
+{
+    return $this->hasOne(Pediatrician::class, 'user_id');
+}
+
     public function vaccinations()
     {
         return $this->hasMany(Vaccination::class, 'pediatrician_id');
+    }
+    // App\Models\User.php (أو App\Models\Parent.php إن وُجد)
+
+    public function children()
+    {
+        return $this->hasMany(Child::class, 'parent_id');
+    }
+    // موديل User
+    public function parent()
+    {
+        return $this->hasOne(ParentModel::class);  // assuming `parent` is a table with a foreign key `user_id`
     }
 }

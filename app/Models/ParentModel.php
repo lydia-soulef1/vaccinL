@@ -41,5 +41,11 @@ class ParentModel extends Authenticatable
         return $this->hasMany(Notification::class); // assuming there is a Notification model
     }
 
+    // موديل Parent
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // Optionally, you could define additional methods or scopes
 }

@@ -11,7 +11,7 @@ class ChildController extends Controller
     public function store(Request $request)
     {
         // Validate the incoming request data
-         $validated = $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:100',
             'dob' => 'required|date',
             'gender' => 'required|in:M,F',
@@ -43,5 +43,27 @@ class ChildController extends Controller
     {
         $vaccines = Vaccine::all(); // جلب جميع اللقاحات
         return view('welcome', compact('vaccines'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'dob' => 'required|date',
+            'gender' => 'required|in:M,F',
+        ]);
+
+        $child = Child::findOrFail($id);
+        $child->update($request->only('name', 'dob', 'gender'));
+
+        return redirect()->back()->with('success', 'Enfant modifié avec succès.');
+    }
+
+    public function destroy($id)
+    {
+        $child = Child::findOrFail($id);
+        $child->delete();
+
+        return redirect()->back()->with('success', 'Enfant supprimé avec succès.');
     }
 }

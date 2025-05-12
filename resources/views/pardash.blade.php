@@ -144,7 +144,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
+    <h1 class="text-center fw-bold display-4 my-2">Parent Dashboard</h1>
         <div class="header" id="tableu">
             <h1>Tableau de Bord</h1>
             <div class="user-info">
@@ -192,16 +192,25 @@
                         <h5 class="card-title text-primary">
                             👶 Nom de l’enfant : {{ $child->name }}
                         </h5>
+
+                        <p class="card-text">
+                            🚻 <strong>Sexe :</strong> {{ ucfirst($child->gender) }}
+                        </p>
+
                         <p class="card-text">
                             💉 <strong>Prochain vaccin :</strong> {{ $child->next_vaccine_name }}
                         </p>
+
                         <p class="card-text">
-                            📅 <strong>rendez-vous :</strong>
+                            📅 <strong>Rendez-vous :</strong>
                             {{ $child->next_rendez_vous ? \Carbon\Carbon::parse($child->next_rendez_vous)->format('d/m/Y') : 'Non défini' }}
                         </p>
                     </div>
                 </div>
+
+
                 @endforeach
+
             </ul>
             @else
             <div style="text-align: center; padding: 1rem; color: #666;">
@@ -235,6 +244,7 @@
                         </div>
                         <div>
                             <h3 style="margin: 0;">{{ $child['name'] }}</h3>
+                            <small>{{ ucfirst($child->gender) }}</small><br>
                             <small>{{ $child->age }} an(s) - Né(e) le {{ \Carbon\Carbon::parse($child['dob'])->format('d/m/Y') }}</small>
                         </div>
                     </div>
@@ -248,7 +258,72 @@
                             <div class="progress-bar" style="width: {{ $progress }}%"></div>
                         </div>
                     </div>
+                    <div class="mt-3">
+                        <!-- زر تعديل -->
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editChildModal{{ $child->id }}">
+                            Modifier
+                        </button>
+                        <!-- زر حذف -->
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteChildModal{{ $child->id }}">
+                            Supprimer
+                        </button>
+                    </div>
                 </div>
+                <div class="modal fade" id="editChildModal{{ $child->id }}" tabindex="-1" aria-labelledby="editChildModalLabel{{ $child->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editChildModalLabel{{ $child->id }}">Modifier l'enfant</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('children.update', $child->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                        <label for="child_name{{ $child->id }}" class="form-label">Nom de l'enfant</label>
+                                        <input type="text" class="form-control" id="child_name{{ $child->id }}" name="name" value="{{ $child->name }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="dob{{ $child->id }}" class="form-label">Date de naissance</label>
+                                        <input type="date" class="form-control" id="dob{{ $child->id }}" name="dob" value="{{ $child->dob }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="gender{{ $child->id }}" class="form-label">Sexe</label>
+                                        <select class="form-control" id="gender{{ $child->id }}" name="gender" required>
+                                            <option value="M" {{ $child->gender === 'M' ? 'selected' : '' }}>Masculin</option>
+                                            <option value="F" {{ $child->gender === 'F' ? 'selected' : '' }}>Féminin</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal تأكيد الحذف -->
+                <div class="modal fade" id="deleteChildModal{{ $child->id }}" tabindex="-1" aria-labelledby="deleteChildModalLabel{{ $child->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="deleteChildModalLabel{{ $child->id }}">Confirmation de suppression</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûr de vouloir supprimer l'enfant <strong>{{ $child->name }}</strong> ?
+                            </div>
+                            <div class="modal-footer">
+                                <form action="{{ route('children.destroy', $child->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 @endforeach
             </div>
             @else
@@ -334,7 +409,9 @@
 </script>
 
 <!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 

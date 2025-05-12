@@ -17,7 +17,8 @@ class DashboardController extends Controller
 
         $parent = Auth::user();
         // Get the authenticated pediatrician
-        $pediatrician = Auth::user();
+        $pediatrician = Auth::user()->pediatrician;
+
         $totalVaccines = Vaccine::count();
 
         // Get children assigned to the pediatrician
@@ -75,22 +76,13 @@ class DashboardController extends Controller
         return view('meddash', compact('pediatrician', 'children', 'vaccines', 'notifications', 'lastVaccination', 'parent'));
     }
 
-
-
-
-
-    /**
-     * Show the parent dashboard.
-     *
-     * @return \Illuminate\View\View
-     */
     public function parentDashboard()
     {
-        // Get the authenticated parent
+        // الحصول على الأب الحالي
         $parent = Auth::user();
 
-        // Get the parent's children
-        $children = Child::with('parent')  // Load the parent relationship
+        // جلب الأطفال الذين ينتمون إلى الأب (بناءً على user_id)
+        $children = Child::where('parent_id', $parent->id)  // فلترة الأطفال بناءً على parent_id
             ->withCount(['vaccinations as vaccines_done'])
             ->get();
 
@@ -103,7 +95,7 @@ class DashboardController extends Controller
             $child->vaccines_total = $totalVaccines;
             $child->age = \Carbon\Carbon::parse($child->dob)->age;
 
-            // Get the latest vaccination for the child
+            // جلب أحدث تطعيم للطفل
             $lastVaccination = $child->vaccinations()->latest()->first();
             $child->pediatrician_name = $lastVaccination && $lastVaccination->pediatrician
                 ? $lastVaccination->pediatrician->name
@@ -111,37 +103,30 @@ class DashboardController extends Controller
 
             $child->last_vaccine_name = $lastVaccination && $lastVaccination->vaccine ? $lastVaccination->vaccine->name : 'غير متوفر';
 
-            if ($lastVaccination) {
-                // If a vaccination exists, get the next rendezvous date
-                $nextRendezvous = $lastVaccination->next_rendez_vous;
-            } else {
-                // If no vaccination exists, set the next rendezvous to null or some default
-                $nextRendezvous = null;
-            }
-
-            // Attach next rendezvous date to the child model
+            // الحصول على موعد اللقاح التالي
+            $nextRendezvous = $lastVaccination ? $lastVaccination->next_rendez_vous : null;
             $child->next_rendez_vous = $nextRendezvous;
 
-            // Get the next vaccine after the last vaccine
+            // الحصول على اللقاح التالي بعد اللقاح الأخير
             if ($lastVaccination) {
                 $lastVaccineId = $lastVaccination->vaccine_id;
                 $nextVaccine = Vaccine::where('id', '>', $lastVaccineId)->orderBy('id')->first();
             } else {
-                // If no vaccinations, get the first vaccine
                 $nextVaccine = Vaccine::orderBy('id')->first();
             }
 
-            // Store the next vaccine name for the child
+            // تخزين اسم اللقاح التالي
             $child->next_vaccine_name = $nextVaccine ? $nextVaccine->name : null;
             $child->parent_name = $child->parent ? $child->parent->name : 'Non disponible';
         }
 
-        // Get the parent's notifications
+        // جلب الإشعارات الخاصة بالأطفال
         $notifications = Notification::whereIn('child_id', $childIds)->get();
 
-        // Return the dashboard view with the parent data
-        return view('pardash', compact('parent', 'children', 'notifications', 'vaccines', 'lastVaccination'));
+        // عرض الصفحة مع البيانات
+        return view('pardash', compact('parent', 'children', 'notifications', 'vaccines'));
     }
+
 
 
     // التعديل داخل الدالة updateVaccines

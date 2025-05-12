@@ -18,7 +18,7 @@
         <div class="container mx-auto flex justify-between items-center px-4">
             <!-- Logo -->
             <a href="{{ route('welcome') }}" class="logo text-white text-3xl font-semibold hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out">
-                Vaccination Infantile
+                Vaccibaby
             </a>
 
             <!-- Navbar -->
@@ -47,14 +47,33 @@
 
                     <ul class="flex space-x-6">
                         @auth
-                        @if(auth()->user()->is_pediatrician)
-                        <li><a href="{{ route('meddash') }}" class="text-white bg-red-600 hover:bg-red-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">Dashboard</a></li>
+                        @if(auth()->user()->is_admin)
+                        <li>
+                            <a href="{{ route('statistics') }}" class="text-white bg-blue-600 hover:bg-blue-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
+                                Dashboard
+                            </a>
+                        </li>
+                        @elseif(auth()->user()->is_pediatrician)
+                        <li>
+                            <a href="{{ route('meddash') }}" class="text-white bg-red-600 hover:bg-red-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
+                                Dashboard
+                            </a>
+                        </li>
                         @else
-                        <li><a href="{{ route('pardash') }}" class="text-white bg-green-600 hover:bg-green-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">Dashboard</a></li>
+                        <li>
+                            <a href="{{ route('pardash') }}" class="text-white bg-green-600 hover:bg-green-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
+                                Dashboard
+                            </a>
+                        </li>
                         @endif
                         @else
-                        <li><a href="{{ route('login') }}" class="bg-white text-[#4A90E2] px-4 py-2 rounded-full hover:bg-gray-100">Login</a></li>
+                        <li>
+                            <a href="{{ route('login') }}" class="bg-white text-[#4A90E2] px-4 py-2 rounded-full hover:bg-gray-100">
+                                Connexion
+                            </a>
+                        </li>
                         @endauth
+
                     </ul>
                 </ul>
             </nav>
