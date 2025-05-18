@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Child;
 use App\Models\ParentModel; // تأكد أنك تستخدم النموذج الصحيح
 use App\Models\User;
+use App\Models\Pediatrician;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PediatricianAccepted;
 
 class AdminController extends Controller
 {
@@ -57,13 +60,19 @@ class AdminController extends Controller
         return response()->json(['children' => $children]);
     }
 
+
+
     public function acceptPediatrician($id)
-{
-    DB::table('pediatricians')
-        ->where('id', $id)
-        ->update(['accepted' => true]);
+    {
+        $pediatrician = Pediatrician::findOrFail($id);
 
-    return response()->json(['message' => 'Pédiatre accepté avec succès.']);
-}
+        // تحديث الحقل accepted
+        $pediatrician->accepted = true;
+        $pediatrician->save();
 
+        // إرسال بريد للطبيب
+        Mail::to($pediatrician->email)->send(new PediatricianAccepted($pediatrician));
+
+        return response()->json(['success' => true]);
+    }
 }

@@ -63,7 +63,7 @@
 
 
     <div class="container mt-4">
-        <h1 class="text-center fw-bold display-4 my-4">Pediatrican Dashboard</h1>
+        <h1 class="text-center fw-bold display-4 my-4">Tableau de bord pediatrican</h1>
         <div class="header" id="tableu">
             <div class="user-info">
                 <div class="user-avatar">

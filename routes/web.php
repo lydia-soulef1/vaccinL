@@ -59,8 +59,18 @@ Route::get('statistics', [AdminController::class, 'statistics'])->name('statisti
 
 Route::get('/admin/parent/{id}/children', [AdminController::class, 'getChildren']);
 
-Route::post('/pediatricians/{id}/accept', [AdminController::class, 'acceptPediatrician'])->name('pediatricians.accept');
+
 
 Route::put('/children/{id}', [ChildController::class, 'update'])->name('children.update');
 
 Route::delete('/children/{id}', [ChildController::class, 'destroy'])->name('children.destroy');
+
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
+
+Route::get('/send-test-email', function () {
+    Mail::to('Cheboublydia2@gmail.com')->send(new WelcomeMail());
+    return 'E-mail envoyé avec succès !';
+});
+Route::post('/pediatrician/accept/{id}', [AdminController::class, 'acceptPediatrician'])->name('pediatrician.accept');

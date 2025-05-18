@@ -1,13 +1,14 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="bg-gray-900 text-gray-100 h-screen mx-auto p-4 md:p-6 lg:p-8 flex flex-col items-center">
+
+<div class="bg-gray-900 text-gray-100 mx-auto p-4 md:p-6 lg:p-8 flex flex-col items-center">
     <h1 class="text-4xl font-bold text-blue-500 mb-8">
         <i class="fas fa-user-md mr-3"></i>Inscription Médecin
     </h1>
 
     <!-- Formulaire d'inscription -->
-    <form id="registerForm" action="{{ url('/register/medecin') }}" method="POST" class="w-full max-w-md">
+    <form id="registerForm" action="{{ url('/register/medecin') }}" method="POST" class="w-full max-w-lg">
         @csrf
         <div class="mb-6">
             <label for="name" class="block text-gray-100 text-lg mb-2">Nom</label>

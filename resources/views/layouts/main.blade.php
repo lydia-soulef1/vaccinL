@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Vaccination Infantile')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -14,16 +15,26 @@
 
 <body class="bg-gray-100">
     <!-- Header Section -->
-    <header class="bg-[#4A90E2] py-4">
+    <header class="bg-[#4A90E2] py-4" x-data="{ isOpen: false }">
         <div class="container mx-auto flex justify-between items-center px-4">
             <!-- Logo -->
             <a href="{{ route('welcome') }}" class="logo text-white text-3xl font-semibold hover:text-gray-300 cursor-pointer transition duration-300 ease-in-out">
                 Vaccibaby
             </a>
 
+            <!-- Hamburger Button (Mobile) -->
+            <button @click="isOpen = !isOpen" class="md:hidden text-white focus:outline-none">
+                <svg x-show="!isOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg x-show="isOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display: none;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
             <!-- Navbar -->
-            <nav class="hidden md:flex space-x-6">
-                <ul class="flex space-x-6">
+            <nav :class="{'block': isOpen, 'hidden': !isOpen}" class="md:flex md:items-center md:space-x-6 space-y-4 md:space-y-0 mt-4 md:mt-0 hidden flex-col md:flex-row w-full md:w-auto">
+                <ul class="flex flex-col md:flex-row md:space-x-6 w-full md:w-auto">
                     <li>
                         <a href="{{ Request::is('/') ? '#features' : url('/#features') }}" class="text-white hover:text-gray-300">
                             Fonctionnalités
@@ -45,63 +56,40 @@
                         </a>
                     </li>
 
-                    <ul class="flex space-x-6">
-                        @auth
-                        @if(auth()->user()->is_admin)
-                        <li>
-                            <a href="{{ route('statistics') }}" class="text-white bg-blue-600 hover:bg-blue-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
-                                Dashboard
-                            </a>
-                        </li>
-                        @elseif(auth()->user()->is_pediatrician)
-                        <li>
-                            <a href="{{ route('meddash') }}" class="text-white bg-red-600 hover:bg-red-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
-                                Dashboard
-                            </a>
-                        </li>
-                        @else
-                        <li>
-                            <a href="{{ route('pardash') }}" class="text-white bg-green-600 hover:bg-green-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
-                                Dashboard
-                            </a>
-                        </li>
-                        @endif
-                        @else
-                        <li>
-                            <a href="{{ route('login') }}" class="bg-white text-[#4A90E2] px-4 py-2 rounded-full hover:bg-gray-100">
-                                Connexion
-                            </a>
-                        </li>
-                        @endauth
-
-                    </ul>
+                    @auth
+                    @if(auth()->user()->is_admin)
+                    <li>
+                        <a href="{{ route('statistics') }}" class="text-white bg-blue-600 hover:bg-blue-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
+                            Tableau de bord
+                        </a>
+                    </li>
+                    @elseif(auth()->user()->is_pediatrician)
+                    <li>
+                        <a href="{{ route('meddash') }}" class="text-white bg-red-600 hover:bg-red-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
+                            Tableau de bord
+                        </a>
+                    </li>
+                    @else
+                    <li>
+                        <a href="{{ route('pardash') }}" class="text-white bg-green-600 hover:bg-green-700 hover:text-gray-300 font-semibold px-4 py-2 rounded-full transition duration-300 ease-in-out">
+                            Dashboard
+                        </a>
+                    </li>
+                    @endif
+                    @else
+                    <li>
+                        <a href="{{ route('login') }}" class="bg-white text-[#4A90E2] px-4 py-2 rounded-full hover:bg-gray-100">
+                            Connexion
+                        </a>
+                    </li>
+                    @endauth
                 </ul>
             </nav>
-
-            <!-- Mobile Menu Button -->
-            <div class="md:hidden flex items-center">
-                <button id="mobile-menu-button" class="text-white focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden hidden bg-[#4A90E2] text-white py-4">
-            <ul class="space-y-4 px-4">
-                <li><a href="#accueil" class="block hover:text-gray-300">Accueil</a></li>
-                <li><a href="#features" class="block hover:text-gray-300">Fonctionnalités</a></li>
-                <li><a href="#conditions" class="block hover:text-gray-300">Conditions</a></li>
-                <li><a href="#importance" class="block hover:text-gray-300">Importance</a></li>
-                <li><a href="#vaccins" class="block hover:text-gray-300">Vaccin</a></li>
-                <li><a href="login.html" class="block bg-white text-[#4A90E2] px-4 py-2 rounded-full hover:bg-gray-100">Connexion</a></li>
-            </ul>
         </div>
     </header>
 
-    <!-- Main Content Section -->
+
+    
     <main>
         @yield('content')
     </main>
@@ -110,9 +98,6 @@
     <footer class="bg-[#4A90E2] py-4 text-center text-white">
         <p>&copy; 2025 Vaccination Infantile. Tous droits réservés.</p>
     </footer>
-
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="fixed bottom-4 right-4 bg-[#4A90E2] text-white p-3 rounded-full shadow-md hover:bg-blue-700">⬆ Retour en haut</button>
 
     <script>
         document.getElementById("backToTop").addEventListener("click", function() {
@@ -128,5 +113,6 @@
         });
     </script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 </html>

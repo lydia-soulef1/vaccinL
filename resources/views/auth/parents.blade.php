@@ -4,7 +4,7 @@
 <div class="bg-gray-900 text-gray-100 h-screen mx-auto p-4  md:p-6 lg:p-8 flex flex-col items-center">
     <h1 class="text-5xl text-blue-500 mb-8 mt-8">Inscription Parent</h1>
 
-    <form action="{{ route('register.parent') }}" method="POST" class="w-full max-w-md">
+    <form action="{{ route('register.parent') }}" method="POST" class="w-full max-w-lg">
         @csrf
 
         <!-- Champ Nom complet -->

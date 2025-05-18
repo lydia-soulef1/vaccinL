@@ -14,13 +14,6 @@
             <img src="{{ asset('images/logo-white.jpg') }}" alt="VacciBaby" class="img-fluid">
         </div>
 
-        <!-- Search form -->
-        <div class="search-box mb-4 position-relative">
-            <input type="text" id="searchChild" class="form-control" placeholder="Rechercher un enfant" onkeyup="searchChild()">
-            <i class="fas fa-search search-icon"></i>
-        </div>
-
-
         <ul class="nav-menu list-unstyled">
             <!-- Dashboard link -->
             <li class="nav-item">
@@ -29,26 +22,6 @@
                 </a>
             </li>
 
-            <!-- Calendar link -->
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-toggle="modal" data-target="#calendarModal">
-                    <i class="fas fa-calendar-alt"></i> Calendrier
-                </a>
-            </li>
-
-            <!-- Vaccination Progress link -->
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-toggle="modal" data-target="#vaccinationProgressModal">
-                    <i class="fas fa-syringe"></i> Progression Vaccinale
-                </a>
-            </li>
-
-            <!-- Notifications link -->
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-toggle="modal" data-target="#notificationsModal">
-                    <i class="fas fa-bell"></i> Notifications
-                </a>
-            </li>
 
             <!-- Logout link -->
             <li class="nav-item">
@@ -61,7 +34,7 @@
     </div>
 
     <div class="main-content">
-    <h1 class="text-center fw-bold display-4 my-2">Admin Dashboard</h1>
+    <h1 class="text-center fw-bold display-4 my-2">Tableau de bord admin</h1>
     <h1 class="text-2xl font-bold mb-6">Tableu de bord</h1>
         <div class="stats-grid">
             <div class="card stat-card">
@@ -226,24 +199,31 @@
 </script>
 <script>
     function acceptPediatrician(id) {
-        fetch(`/pediatricians/${id}/accept`, {
-                method: 'POST',
+        if (confirm("Confirmer la validation de ce pédiatre ?")) {
+            fetch(`/pediatrician/accept/${id}`, {
+                method: "POST",
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Content-Type": "application/json"
                 }
             })
-            .then(res => res.json())
+            .then(response => response.json())
             .then(data => {
-                alert(data.message);
-                location.reload(); // إعادة تحميل الصفحة لتحديث القائمة
+                if (data.success) {
+                    alert("Pédiatre validé et email envoyé !");
+                    location.reload(); // إعادة تحميل الصفحة لتحديث القائمة
+                } else {
+                    alert("Erreur lors de la validation.");
+                }
             })
             .catch(error => {
-                console.error('Erreur:', error);
-                alert("Erreur lors de l'acceptation.");
+                console.error("Erreur:", error);
+                alert("Erreur lors de la validation.");
             });
+        }
     }
 </script>
+
 
 
 

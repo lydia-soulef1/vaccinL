@@ -18,39 +18,40 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    // Handle login request
     public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|min:6',
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
 
-    $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email', 'password');
 
-    Log::info('Login attempt', $credentials);
+        Log::info('Login attempt', $credentials);
 
-    if (Auth::validate($credentials)) {
-        $user = User::where('email', $credentials['email'])->first();
+        if (Auth::validate($credentials)) {
+            $user = User::where('email', $credentials['email'])->first();
 
-        // التحقق من حالة القبول فقط إذا كان طبيب أطفال
-        if ($user->is_pediatrician) {
-            $pediatrician = Pediatrician::find($user->id);
+            // التحقق من حالة القبول إذا كان المستخدم طبيب أطفال
+            if ($user->is_pediatrician) {
+                $pediatrician = Pediatrician::where('user_id', $user->id)->first();
 
-            if ($pediatrician && !$pediatrician->accepted) {
-                return back()->withErrors(['email' => 'Votre compte n\'a pas encore été accepté. Veuillez patienter.']);
+                if (!$pediatrician || !$pediatrician->accepted) {
+                    return back()->withErrors([
+                        'email' => "Votre compte de pédiatre n'a pas encore été accepté. Veuillez patienter."
+                    ]);
+                }
+            }
+
+            // تسجيل الدخول بعد التحقق
+            if (Auth::attempt($credentials)) {
+                return redirect()->route('welcome');
             }
         }
 
-        // تسجيل الدخول الفعلي
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('welcome');
-        }
+        Log::error('Failed login attempt for email: ' . $credentials['email']);
+        return back()->withErrors(['email' => 'Identifiants invalides.']);
     }
-
-    Log::error('Failed login attempt for email: ' . $credentials['email']);
-    return back()->withErrors(['email' => 'Identifiants invalides.']);
-}
 
 
     public function logout(Request $request)

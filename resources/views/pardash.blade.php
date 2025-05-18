@@ -144,7 +144,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-    <h1 class="text-center fw-bold display-4 my-2">Parent Dashboard</h1>
+    <h1 class="text-center fw-bold display-4 my-2">Tableau de bord parent</h1>
         <div class="header" id="tableu">
             <h1>Tableau de Bord</h1>
             <div class="user-info">
